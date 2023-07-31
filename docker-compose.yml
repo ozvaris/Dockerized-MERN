@@ -1,0 +1,44 @@
+version: '3.7'
+services:
+  mongo:
+    build: ./mongo
+    # volumes:
+    #  - ./data:/data/db
+    ports:
+     - 27017:27017
+    networks:
+      - mern    
+
+  backend:
+    build: ./backend
+    # command: npm start
+    #volumes:
+    #  - ./backend:/usr/src/app
+    #  - /usr/src/app/node_modules
+    ports:
+      - 5000:5000
+    depends_on:
+      - mongo
+    environment:
+      - MONGO_URI=mongodb://mongo:27017/mern-docker
+    networks:
+      - mern
+  
+  frontend:
+    build: ./frontend
+    # command: npm start
+    #volumes:
+    #  - ./frontend:/src/app
+    #  - /usr/src/app/node_modules
+    ports:
+      - 3000:3000
+    depends_on:
+      - backend
+    environment:
+      - BACKEND_URI=http://backend:5000/api
+    networks:
+      - mern
+
+networks:
+  mern:
+    driver: bridge
