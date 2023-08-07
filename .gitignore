@@ -8,6 +8,8 @@
 
 # production
 /build
+# mongo data files
+data/
 
 # misc
 .DS_Store
